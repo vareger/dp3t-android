@@ -38,7 +38,6 @@
         <item>@string/decline_permission_level_text</item>
     </string-array>
 
-
     <string name="dp3t_sdk_service_notification_channel">DP3T SDK</string>
     <string name="dp3t_sdk_service_notification_title">DP3T SDK</string>
     <string name="dp3t_sdk_service_notification_text">Looking for people nearby…</string>
@@ -51,5 +50,8 @@
     <string name="dp3t_sdk_service_notification_error_bluetooth_internal_error">bluetooth system error, please restart device</string>
     <string name="dp3t_sdk_service_notification_error_bluetooth_advertising_error">failing to broadcast with bluetooth</string>
     <string name="dp3t_sdk_service_notification_error_bluetooth_scanner_error">failing to search for nearby bluetooth devices</string>
+
+    <string name="push_exposed_title">push_exposed_title</string>
+    <string name="push_exposed_text">push_exposed_text</string>
 
 </resources>
