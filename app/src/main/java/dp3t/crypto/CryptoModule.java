@@ -63,7 +63,7 @@ public class CryptoModule {
 			instance = new CryptoModule();
 			try {
 				String KEY_ALIAS = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
-				instance.esp = EncryptedSharedPreferences.create("dp3t_store",
+				instance.esp = EncryptedSharedPreferences.create("dp3t_sonic_store",
 						KEY_ALIAS,
 						context,
 						EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
@@ -79,7 +79,6 @@ public class CryptoModule {
 		try {
 			String stringKey = esp.getString(KEY_SK_LIST_JSON, null);
 			if (stringKey != null) return true; //key already exists
-
 			KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
 			SecretKey secretKey = keyGenerator.generateKey();
 			SKList skList = new SKList();
@@ -138,7 +137,6 @@ public class CryptoModule {
 			mac.init(new SecretKeySpec(SK, "HmacSHA256"));
 			mac.update(BROADCAST_KEY);
 			byte[] prf = mac.doFinal();
-
 			//generate EphIDs
 			SecretKeySpec keySpec = new SecretKeySpec(prf, "AES");
 			Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");

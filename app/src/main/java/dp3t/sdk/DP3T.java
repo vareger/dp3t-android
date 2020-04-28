@@ -41,9 +41,9 @@ import dp3t.util.ProcessUtil;
 
 public class DP3T {
 
-	private static final String TAG = "DP3T Interface";
+	private static final String TAG = "DP3TSonic Interface";
 
-	public static final String UPDATE_INTENT_ACTION = "org.dpppt.android.sdk.UPDATE_ACTION";
+	public static final String UPDATE_INTENT_ACTION = "dp3t.sdk.UPDATE_ACTION";
 
 	private static String appId;
 
@@ -58,7 +58,6 @@ public class DP3T {
 			appConfigManager.setAppId(appId);
 			appConfigManager.setDevDiscoveryModeEnabled(enableDevDiscoveryMode);
 			appConfigManager.triggerLoad();
-
 			executeInit(context);
 		}
 	}
@@ -68,14 +67,12 @@ public class DP3T {
 			DP3T.appId = applicationInfo.getAppId();
 			AppConfigManager appConfigManager = AppConfigManager.getInstance(context);
 			appConfigManager.setManualApplicationInfo(applicationInfo);
-
 			executeInit(context);
 		}
 	}
 
 	private static void executeInit(Context context) {
 		CryptoModule.getInstance(context).init();
-
 		AppConfigManager appConfigManager = AppConfigManager.getInstance(context);
 		boolean advertising = appConfigManager.isAdvertisingEnabled();
 		boolean receiving = appConfigManager.isReceivingEnabled();

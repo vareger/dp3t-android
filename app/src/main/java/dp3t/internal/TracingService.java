@@ -55,7 +55,7 @@ public class TracingService extends Service {
 	public static final String EXTRA_SCAN_INTERVAL = TracingService.class.getCanonicalName() + ".EXTRA_SCAN_INTERVAL";
 	public static final String EXTRA_SCAN_DURATION = TracingService.class.getCanonicalName() + ".EXTRA_SCAN_DURATION";
 
-	private static final String NOTIFICATION_CHANNEL_ID = "dp3t_tracing_service";
+	private static final String NOTIFICATION_CHANNEL_ID = "dp3t_sonic_tracing_service";
 	private static final int NOTIFICATION_ID = 1827;
 
 	private Handler handler;
@@ -297,7 +297,6 @@ public class TracingService extends Service {
 		stopServer();
 		if (startAdvertising) {
 			bleServer = new BleServer(this);
-
 			Logger.d(TAG, "startAdvertising");
 			BluetoothState advertiserState = bleServer.startAdvertising();
 			return advertiserState;

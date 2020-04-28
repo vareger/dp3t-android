@@ -25,7 +25,7 @@ import dp3t.models.ApplicationInfo;
 public class SyncWorker extends Worker {
 
 	private static final String TAG = "SyncWorker";
-	private static final String WORK_TAG = "org.dpppt.android.sdk.internal.SyncWorker";
+	private static final String WORK_TAG = "dp3t.internal.SyncWorker";
 	public static final long BATCH_LENGTH = 2 * 60 * 60 * 1000L;
 
 	public static void startSyncWorker(Context context) {
