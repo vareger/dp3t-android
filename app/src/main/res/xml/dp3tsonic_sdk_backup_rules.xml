@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+	<exclude
+		domain="sharedpref"
+		path="dp3tsonic_sdk_preferences.xml" />
+	<exclude
+		domain="sharedpref"
+		path="dp3t_sonic_store.xml" />
+	<exclude
+		domain="database"
+		path="sonicdp3t_sdk.db" />
+	<exclude
+		domain="database"
+		path="dp3tsonic_sdk_log.db" />
+</full-backup-content>

@@ -21,7 +21,7 @@ import com.maritech.sonicdp3t.R;
 
 public class NotificationUtil {
 
-	private static final String NOTIFICATION_CHANNEL_ID = "dp3t_sdk_sample_channel";
+	private static final String NOTIFICATION_CHANNEL_ID = "dp3t_sdk_sonic_channel";
 	private static final int NOTIFICATION_ID = 1;
 
 	@RequiresApi(api = Build.VERSION_CODES.O)

@@ -38,8 +38,8 @@
         <item>@string/decline_permission_level_text</item>
     </string-array>
 
-    <string name="dp3t_sdk_service_notification_channel">DP3T SDK</string>
-    <string name="dp3t_sdk_service_notification_title">DP3T SDK</string>
+    <string name="dp3t_sdk_service_notification_channel">Tracking activated</string>
+    <string name="dp3t_sdk_service_notification_title">Tracking activated</string>
     <string name="dp3t_sdk_service_notification_text">Looking for people nearby…</string>
     <string name="dp3t_sdk_service_notification_errors">App can\'t function properly:</string>
     <string name="dp3t_sdk_service_notification_error_network_sync">error while loading new contact data</string>

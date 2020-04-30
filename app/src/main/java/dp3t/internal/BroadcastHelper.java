@@ -13,7 +13,7 @@ import dp3t.sdk.DP3T;
 
 public class BroadcastHelper {
 
-	public static final String ACTION_UPDATE_ERRORS = "org.dpppt.android.sdk.internal.ACTION_UPDATE_ERRORS";
+	public static final String ACTION_UPDATE_ERRORS = "dp3t.internal.ACTION_UPDATE_ERRORS";
 
 	public static void sendUpdateBroadcast(Context context) {
 		Intent intent = new Intent(DP3T.UPDATE_INTENT_ACTION);

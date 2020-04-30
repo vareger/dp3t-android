@@ -137,7 +137,7 @@ public class LogDatabase {
 	protected static class LogDatabaseHelper extends SQLiteOpenHelper {
 
 		public static final int DATABASE_VERSION = 2;
-		private static final String DATABASE_NAME = "dp3t_sdk_log.db";
+		private static final String DATABASE_NAME = "dp3tsonic_sdk_log.db";
 
 		private static final String SQL_CREATE_ENTRIES =
 				"CREATE TABLE " + LogSpec.TABLE_NAME + " (" +

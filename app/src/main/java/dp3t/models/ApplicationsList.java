@@ -14,9 +14,11 @@ public class ApplicationsList {
 
 	public ApplicationsList() {
 		applications = new ArrayList<>();
+
 	}
 
 	public List<ApplicationInfo> getApplications() {
+		applications.add(new ApplicationInfo("com.maritech.tracker","",""));
 		return applications;
 	}
 
