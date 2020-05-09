@@ -18,7 +18,7 @@ public class ApplicationsList {
 	}
 
 	public List<ApplicationInfo> getApplications() {
-		applications.add(new ApplicationInfo("com.maritech.tracker","",""));
+		applications.add(new ApplicationInfo("com.vareger.tracker","",""));
 		return applications;
 	}
 

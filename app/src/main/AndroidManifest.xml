@@ -18,7 +18,9 @@
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
 
-    <application  android:fullBackupContent="@xml/dp3tsonic_sdk_backup_rules">
+    <application
+        android:usesCleartextTraffic="true"
+        android:fullBackupContent="@xml/dp3tsonic_sdk_backup_rules">
 
         <service
             android:name="dp3t.internal.TracingService"

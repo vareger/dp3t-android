@@ -53,6 +53,7 @@ public class CryptoModule {
 
 	private static final String KEY_SK_LIST_JSON = "SK_LIST_JSON";
 	private static final String KEY_EPHIDS_TODAY_JSON = "EPHIDS_TODAY_JSON";
+	private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
 	private static CryptoModule instance;
 
@@ -198,6 +199,35 @@ public class CryptoModule {
 		return getEphIdsForToday(currentDay).get(getEpochCounter(now));
 	}
 
+	public String getCurrentStringEphId() {
+		return bytesToHex(getCurrentEphId().getData());
+	}
+
+
+	public byte[] getCurrentEphIdFromString(String token) {
+		return hexStringToByteArray(token);
+	}
+
+	public static byte[] hexStringToByteArray(String s) {
+		int len = s.length();
+		byte[] data = new byte[len / 2];
+		for (int i = 0; i < len; i += 2) {
+			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+					+ Character.digit(s.charAt(i+1), 16));
+		}
+		return data;
+	}
+
+	public static String bytesToHex(byte[] bytes) {
+		char[] hexChars = new char[bytes.length * 2];
+		for (int j = 0; j < bytes.length; j++) {
+			int v = bytes[j] & 0xFF;
+			hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+			hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+		}
+		return new String(hexChars);
+	}
+
 	public void checkContacts(byte[] sk, long onsetDate, long bucketTime, GetContactsCallback contactCallback,
 			MatchCallback matchCallback) {
 		DayDate dayToTest = new DayDate(onsetDate);
@@ -209,7 +239,6 @@ public class CryptoModule {
 			if (contactsOnDay.size() > 0) {
 				//generate all ephIds for day
 				HashSet<EphId> ephIdHashSet = new HashSet<>(createEphIds(skForDay, false));
-
 				//check all contacts if they match any of the ephIds
 				for (Contact contact : contactsOnDay) {
 					if (ephIdHashSet.contains(contact.getEphId())) {
