@@ -7,9 +7,11 @@ import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import Jampack.Z;
+import dp3t.models.PullData;
 import io.reactivex.Observable;
 import okhttp3.Cache;
 import okhttp3.Interceptor;
@@ -46,8 +48,8 @@ public interface WebService {
 
    //?startDate=2020-05-07T00:00:00.000Z&endDate=2020-05-09T00:00:00.000Z
     @GET("pull")
-    Observable<ResponseBody> getCases(@Query("startDate") String startDate,
-                                      @Query("endDate") String endDate);
+    Observable<List<PullData>> getCases(@Query("startDate") Long startDate,
+                                        @Query("endDate") Long endDate);
 
     class MyInterceptor implements Interceptor {
         @Override

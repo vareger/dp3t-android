@@ -8,10 +8,10 @@ package dp3t.models;
 public class KnownCase {
 
 	private int id;
-	private String day;
+	private Long day;
 	private byte[] key;
 
-	public KnownCase(int id, String day, byte[] key) {
+	public KnownCase(int id, Long day, byte[] key) {
 		this.id = id;
 		this.day = day;
 		this.key = key;
@@ -21,7 +21,7 @@ public class KnownCase {
 		return id;
 	}
 
-	public String getDay() {
+	public Long getDay() {
 		return day;
 	}
 

@@ -26,12 +26,15 @@ import dp3t.backend.WebService;
 import dp3t.database.Database;
 import dp3t.logger.Logger;
 import dp3t.models.ApplicationInfo;
+import dp3t.models.PullData;
+
+import static dp3t.crypto.CryptoModule.hexStringToByteArray;
 
 public class SyncWorker extends Worker {
 
     private static final String TAG = "SyncWorker";
     private static final String WORK_TAG = "dp3t.internal.SyncWorker";
-    public static final long BATCH_LENGTH = 2 * 60 * 60 * 1000L;
+    public static final long BATCH_LENGTH = 21 * 24 * 60 * 60 * 1000L;
 
     public static void startSyncWorker(Context context) {
         Constraints constraints = new Constraints.Builder()
@@ -59,11 +62,9 @@ public class SyncWorker extends Worker {
     @Override
     public Result doWork() {
         Context context = getApplicationContext();
-
         long scanInterval = AppConfigManager.getInstance(getApplicationContext()).getScanInterval();
         TracingService.scheduleNextClientRestart(context, scanInterval);
         TracingService.scheduleNextServerRestart(context);
-
         try {
             doSync(context);
             Logger.i(TAG, "synced");
@@ -80,11 +81,8 @@ public class SyncWorker extends Worker {
     public static void doSync(Context context) throws IOException {
         AppConfigManager appConfigManager = AppConfigManager.getInstance(context);
         appConfigManager.updateFromDiscoverySynchronous();
-        ApplicationInfo appConfig = appConfigManager.getAppConfig();
-
         Database database = new Database(context);
         database.generateContactsFromHandshakes(context);
-
         long lastLoadedBatchReleaseTime = appConfigManager.getLastLoadedBatchReleaseTime();
         long nextBatchReleaseTime;
         if (lastLoadedBatchReleaseTime <= 0 || lastLoadedBatchReleaseTime % BATCH_LENGTH != 0) {
@@ -93,18 +91,32 @@ public class SyncWorker extends Worker {
         } else {
             nextBatchReleaseTime = lastLoadedBatchReleaseTime + BATCH_LENGTH;
         }
-
-
         for (long batchReleaseTime = nextBatchReleaseTime;
              batchReleaseTime < System.currentTimeMillis();
              batchReleaseTime += BATCH_LENGTH) {
-
-            RxUtil.networkConsumer(WebService.service.getCases("2020-05-07T00:00:00.000Z", "2020-05-09T00:00:00.000Z"),
-                    responseBody -> {
+            long syncDate = batchReleaseTime;
+            long startDate = batchReleaseTime/1000;
+            long endDate = System.currentTimeMillis()/1000;
+            Log.d(TAG, "doSync: finalBatchReleaseTime " + startDate);
+            Log.d(TAG, "doSync: nowTime " + endDate);
+            RxUtil.networkConsumer(WebService.service.getCases(startDate, endDate),
+                    pullData -> {
                         Log.d(TAG, "doSync: " + true);
-                    });
+                        for (PullData data: pullData){
+                            if (data.getToken().length()==32){
+                                database.addKnownCase(
+                                        context,
+                                        hexStringToByteArray(data.getToken()),
+                                        data.getCreateDate(),
+                                        syncDate
+                                );
+                            }
+                        }
+                        appConfigManager.setLastLoadedBatchReleaseTime(syncDate);
 
-            appConfigManager.setLastLoadedBatchReleaseTime(batchReleaseTime);
+                    }, throwable -> {
+                        Log.d(TAG, "doSync: " + false);
+                    });
         }
 
         database.removeOldKnownCases();

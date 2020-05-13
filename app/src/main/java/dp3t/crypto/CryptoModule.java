@@ -203,11 +203,6 @@ public class CryptoModule {
 		return bytesToHex(getCurrentEphId().getData());
 	}
 
-
-	public byte[] getCurrentEphIdFromString(String token) {
-		return hexStringToByteArray(token);
-	}
-
 	public static byte[] hexStringToByteArray(String s) {
 		int len = s.length();
 		byte[] data = new byte[len / 2];

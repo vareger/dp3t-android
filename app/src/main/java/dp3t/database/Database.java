@@ -22,6 +22,7 @@ import dp3t.crypto.EphId;
 import dp3t.internal.BroadcastHelper;
 import dp3t.models.Contact;
 import dp3t.models.Handshake;
+import dp3t.models.KnownCase;
 import dp3t.models.MatchedContact;
 import dp3t.util.DayDate;
 
@@ -156,11 +157,6 @@ public class Database {
 			}
 
 			SQLiteDatabase db = databaseOpenHelper.getWritableDatabase();
-//			if (!BuildConfig.FLAVOR.equals("calibration")) {
-//				//unless in calibration mode, delete handshakes after converting them to contacts
-//				db.delete(Handshakes.TABLE_NAME, Handshakes.TIMESTAMP + " < ?",
-//						new String[] { "" + currentEpochStart });
-//			}
 			DayDate lastDayToKeep = new DayDate().subtractDays(CryptoModule.NUMBER_OF_DAYS_TO_KEEP_DATA);
 			db.delete(Contacts.TABLE_NAME, Contacts.DATE + " < ?",
 					new String[] { Long.toString(lastDayToKeep.getStartOfDayTimestamp()) });
@@ -183,6 +179,14 @@ public class Database {
 		return getContactsFromCursor(cursor);
 	}
 
+	public List<KnownCase> getKnownCases() {
+		SQLiteDatabase db = databaseOpenHelper.getReadableDatabase();
+		Cursor cursor = db
+				.query(KnownCases.TABLE_NAME, KnownCases.PROJECTION, null, null, null, null, KnownCases.ID);
+		return getKnownFromCursor(cursor);
+	}
+
+
 	public List<Contact> getContacts(long timeFrom, long timeUntil) {
 		SQLiteDatabase db = databaseOpenHelper.getReadableDatabase();
 		Cursor cursor = db.query(Contacts.TABLE_NAME, Contacts.PROJECTION, Contacts.DATE + ">=? AND " + Contacts.DATE + "<?",
@@ -203,6 +207,19 @@ public class Database {
 		}
 		cursor.close();
 		return contacts;
+	}
+
+	private List<KnownCase> getKnownFromCursor(Cursor cursor) {
+		List<KnownCase> cases = new ArrayList<>();
+		while (cursor.moveToNext()) {
+			int id = cursor.getInt(cursor.getColumnIndexOrThrow(KnownCases.ID));
+			Long day = cursor.getLong(cursor.getColumnIndexOrThrow(KnownCases.BUCKET_TIME));
+			byte[] key = cursor.getBlob(cursor.getColumnIndexOrThrow(KnownCases.KEY));
+			KnownCase knownCase = new  KnownCase(id, day, key);
+			cases.add(knownCase);
+		}
+		cursor.close();
+		return cases;
 	}
 
 	public List<MatchedContact> getMatchedContacts() {

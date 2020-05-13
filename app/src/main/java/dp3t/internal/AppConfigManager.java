@@ -84,7 +84,7 @@ public class AppConfigManager {
 				return application;
 			}
 		}
-		throw new IllegalStateException("The provided appId is not found by the discovery service!");
+			throw new IllegalStateException("The provided appId is not found by the discovery service!");
 	}
 
 	public void setAdvertisingEnabled(boolean enabled) {

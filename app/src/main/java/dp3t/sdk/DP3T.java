@@ -34,7 +34,7 @@ import dp3t.internal.TracingService;
 import dp3t.logger.Logger;
 import dp3t.models.ApplicationInfo;
 import dp3t.models.ExposeeAuthMethod;
-import dp3t.models.ExposeeRequest;
+import dp3t.models.KnownCase;
 import dp3t.models.MatchedContact;
 import dp3t.util.DayDate;
 import dp3t.util.ProcessUtil;
@@ -130,6 +130,7 @@ public class DP3T {
 		AppConfigManager appConfigManager = AppConfigManager.getInstance(context);
 		Collection<TracingStatus.ErrorState> errorStates = checkTracingStatus(context);
 		List<MatchedContact> matchedContacts = database.getMatchedContacts();
+		List<KnownCase> knownContacts = database.getKnownCases();
 		InfectionStatus infectionStatus;
 		if (appConfigManager.getIAmInfected()) {
 			infectionStatus = InfectionStatus.INFECTED;
@@ -218,18 +219,6 @@ public class DP3T {
 		return errors;
 	}
 
-	public static void sendIAmInfected(Context context, Date onset, ExposeeAuthMethod exposeeAuthMethod) {
-		checkInit();
-		DayDate onsetDate = new DayDate(onset.getTime());
-		AppConfigManager appConfigManager = AppConfigManager.getInstance(context);
-		try {
-			appConfigManager.setIAmInfected(true);
-			CryptoModule.getInstance(context).reset();
-		} catch (IllegalStateException e) {
-			Logger.e(TAG, e);
-		}
-	}
-
 	public static void stop(Context context) {
 		checkInit();
 		AppConfigManager appConfigManager = AppConfigManager.getInstance(context);
@@ -251,7 +240,6 @@ public class DP3T {
 		if (appConfigManager.isAdvertisingEnabled() || appConfigManager.isReceivingEnabled()) {
 			throw new IllegalStateException("Tracking must be stopped for clearing the local data");
 		}
-
 		CryptoModule.getInstance(context).reset();
 		appConfigManager.clearPreferences();
 		Logger.clear();
